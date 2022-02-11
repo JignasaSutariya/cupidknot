@@ -30,6 +30,7 @@ Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallba
 
 // Route::group(['middleware' => 'auth'], function () {
     // Complete user profile
+    Route::get('user-profile', [UserController::class, 'index'])->name('user-profile');
     Route::post('update-profile', [UserController::class, 'store'])->name('update-profile');
 
     Route::get('home', [HomeController::class, 'index'])->name('home');

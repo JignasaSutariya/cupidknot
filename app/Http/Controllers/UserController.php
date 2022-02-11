@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
-use function PHPUnit\Framework\isTrue;
 use App\Http\Requests\UserProfileUpdateRequest;
 use App\Repositories\PartnerPreferenceRepository;
 use Prettus\Validator\Exceptions\ValidatorException;
@@ -35,6 +34,17 @@ class UserController extends Controller
     }
 
     /**
+     * Show the user profile
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function index()
+    {
+        $user = Auth::user()->load('preference');
+        return view('update-profile')->with(['user' => $user, 'preference' => $user->preference]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  UserCreateRequest $request
@@ -55,17 +65,14 @@ class UserController extends Controller
             // Update in User
             $user = $this->repository->update($input, $input['user_id']);
 
+            // Create data for Partner Preference
             $partnerInput = [
                 'user_id' => $input['user_id'],
                 'prefered_occupation' => implode(',', $input['prefered_occupation']),
                 'prefered_annual_amount' => $input['prefered_annual_amount'],
-                'prefered_family_type' => implode(',', $input['prefered_family_type'])
+                'prefered_family_type' => implode(',', $input['prefered_family_type']),
+                'prefered_manglik' => $input['prefered_manglik'],
             ];
-
-            // Create data for Partner Preference
-            if(!$input['prefered_manglik'] == 'both'){
-                $partnerInput['prefered_manglik'] = ($input['prefered_manglik'] == "yes");
-            }
 
             $partner = $this->partnerPreferenceRepository->findByField('user_id', $input['user_id'])->first();
             if(!$partner){
@@ -75,7 +82,7 @@ class UserController extends Controller
             }
             
             $response = [
-                'message' => 'Profile created successfully.',
+                'message' => 'Profile updated successfully.',
                 'data'    => $user->toArray(),
             ];
 

@@ -172,7 +172,10 @@
                                     <label for="inputOccupation">{{ __('Occupation') }}</label>
                                     <select class="custom-select @error('prefered_occupation') is-invalid @enderror" id="prefered_occupation" name="prefered_occupation[]" multiple>
                                         @php
-                                            $partnerOccupation = old('prefered_occupation', (explode(',',$preference->prefered_occupation) ?? [])) ?? [];
+                                            $partnerOccupation =  [];
+                                            if(isset($preference->prefered_occupation)){
+                                                $partnerOccupation = explode(',', $preference->prefered_occupation);
+                                            }
                                         @endphp
                                         <option value="{{ OCCUPATION_TYPE_PRIVATE_JOB }}" @if(in_array(OCCUPATION_TYPE_PRIVATE_JOB, $partnerOccupation))  selected  @endif>{{ __('Private Job') }}</option>
                                         <option value="{{ OCCUPATION_TYPE_GOVERNMENT_JOB }}" @if(in_array(OCCUPATION_TYPE_GOVERNMENT_JOB, $partnerOccupation))  selected  @endif>{{ __('Government Job') }}</option>
@@ -188,7 +191,10 @@
                                     <label for="inputFamilyType">{{ __('Family Type') }}</label>
                                     <select class="custom-select @error('family_type') is-invalid @enderror" id="prefered_family_type" name="prefered_family_type[]" multiple>
                                         @php
-                                            $partnerFamilyType = old('prefered_family_type', (explode(',', $preference->prefered_family_type) ?? [])) ?? [];
+                                            $partnerFamilyType =  [];
+                                            if(isset($preference->prefered_family_type)){
+                                                $partnerFamilyType = explode(',', $preference->prefered_family_type);
+                                            }
                                         @endphp
                                         <option value="{{ FAMILY_TYPE_JOINT }}" @if(in_array(FAMILY_TYPE_JOINT, $partnerFamilyType))  selected  @endif>{{ __('Joint Family') }}</option>
                                         <option value="{{ FAMILY_TYPE_NUCLEAR }}" @if(in_array(FAMILY_TYPE_NUCLEAR, $partnerFamilyType))  selected  @endif>{{ __('Nuclear Family') }}</option>
@@ -202,11 +208,11 @@
                                     <select class="custom-select @error('manglik') is-invalid @enderror" id="prefered_manglik" name="prefered_manglik">
                                         <option value=''>{{ __('Please select') }}</option>
                                         @php
-                                            $isPartnerManglik = old('prefered_manglik', ($preference->prefered_manglik ?? null)) ?? null;
+                                            $isPartnerManglik = old('prefered_manglik', ($preference->prefered_manglik ?? '')) ?? '';
                                         @endphp
-                                        <option value="yes" @if($isPartnerManglik === true)  selected  @endif>{{ __('Yes') }}</option>
-                                        <option value="no" @if($isPartnerManglik === false)  selected  @endif>{{ __('No') }}</option>
-                                        <option value="both" @if($isPartnerManglik == null)  selected  @endif>{{ __('Both') }}</option>
+                                        <option value="{{PREFERED_MANGLIK_YES}}" @if($isPartnerManglik === PREFERED_MANGLIK_YES)  selected  @endif>{{ __('Yes') }}</option>
+                                        <option value="{{PREFERED_MANGLIK_NO}}" @if($isPartnerManglik === PREFERED_MANGLIK_NO)  selected  @endif>{{ __('No') }}</option>
+                                        <option value="{{PREFERED_MAGLINK_BOTH}}" @if($isPartnerManglik == PREFERED_MAGLINK_BOTH)  selected  @endif>{{ __('Both') }}</option>
                                     </select>
                                     @error('prefered_manglik')
                                         <span class="error invalid-feedback" style="display: inline;">{{ $message }}</span>
@@ -231,10 +237,11 @@
 <script>
 
 $(document).ready(function() {
+    // $('.datepicker').datepicker().val('');
 
     $(function () {
         $('.datepicker').datepicker({ 
-            endDate: '-18y'
+            endDate: '-18y',
         });
     });
 

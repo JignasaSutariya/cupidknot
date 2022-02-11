@@ -23,7 +23,7 @@ class CreatePartnerPreferencesTable extends Migration
             $table->decimal('prefered_annual_amount')->nullable();
             $table->string('prefered_occupation')->nullable();
             $table->string('prefered_family_type')->nullable();
-            $table->string('prefered_manglik')->nullable();
+            $table->enum('prefered_manglik', [PREFERED_MANGLIK_YES,PREFERED_MANGLIK_NO, PREFERED_MAGLINK_BOTH])->nullable();
             $table->timestamps();
         });
 	}
@@ -36,7 +36,7 @@ class CreatePartnerPreferencesTable extends Migration
 	public function down()
 	{
         Schema::dropIfExists('partner_preferences');
-        Schema::table('lists', function($table)
+        Schema::table('users', function($table)
         {
             $table->dropForeign('lists_user_id_foreign');
             $table->foreign('user_id')->references('id')->on('users');
