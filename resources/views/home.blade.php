@@ -19,7 +19,7 @@
                         </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+                    {{ __('Your matches...') }}
                 </div>
             </div>
         </div>

@@ -25,8 +25,9 @@ class HomeController extends Controller
     public function index()
     {
         // Check id the user profile is complete
-        if(!Auth::user()->is_active){
-            return view('update-profile');
+        $user = Auth::user()->load('preference');
+        return view('update-profile')->with(['user' => $user, 'preference' => $user->preference]);
+        if(!$user->is_active){
         }else{
             return view('home');
         }

@@ -28,10 +28,10 @@ Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('
 Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('google.callback');
 
 
-Route::group(['middleware' => 'auth'], function () {
+// Route::group(['middleware' => 'auth'], function () {
     // Complete user profile
-    Route::get('complete-profile', [UserController::class, 'store'])->name('complete-profile');
+    Route::post('update-profile', [UserController::class, 'store'])->name('update-profile');
 
     Route::get('home', [HomeController::class, 'index'])->name('home');
 
-});
+// });
